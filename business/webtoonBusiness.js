@@ -1,5 +1,6 @@
 const naver = require("./naverWebtoon");
 const other = require("./otherWebtoon");
+const comic = require("./comic");
 const models = require("./../models");
 const utils = require("./function");
 const sequelize = require("sequelize");
@@ -220,6 +221,10 @@ exports.getNaverWebtoons = async function () {
 
 exports.otherWebtoonFileDownload = async function (webToonID, folder) {
   await other.fileDownload(webToonID, folder);
+};
+
+exports.comicFileDownload = async function (webToonID, folder) {
+  await comic.fileDownload(webToonID, folder);
 };
 
 exports.otherWebtoonrReFileDownload = async function (

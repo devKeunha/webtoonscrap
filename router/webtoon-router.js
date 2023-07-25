@@ -72,6 +72,12 @@ router.post("/download/other", async (req, res) => {
   res.sendStatus(200);
 });
 
+router.post("/download/comic", async (req, res) => {
+  const webtoonID = req.body.webtoonid;
+  await webtoon.comicFileDownload(webtoonID, webtoon.saveFolder);
+  res.sendStatus(200);
+});
+
 router.post("/redownload/other", async (req, res) => {
   const webtoonID = req.body.webtoonid;
   const pageNo = req.body.pageNo;
