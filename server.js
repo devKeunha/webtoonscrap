@@ -3,9 +3,11 @@ const cors = require("cors");
 const fs = require("fs");
 const webtoon = require("./business/webtoonBusiness");
 const setting = require("./config/envirement");
+const { config } = require("process");
 const port = setting.config.SERVER_PORT;
 const app = express();
 const SCRP_INTERVEL = 1000 * 60 * 10;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

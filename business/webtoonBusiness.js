@@ -231,7 +231,7 @@ exports.otherWebtoonrReFileDownload = async function (
 };
 
 exports.getOtherWebtoons = async function (toon) {
-  return await newotheroki.webtoonLists(toon);
+  return await other.webtoonLists(toon);
 };
 
 exports.autoImageFileDownload = async function (folder) {

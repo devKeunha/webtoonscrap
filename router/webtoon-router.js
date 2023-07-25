@@ -1,7 +1,6 @@
 const webtoon = require("./../business/webtoonBusiness");
 const express = require("express");
 const router = express.Router();
-// const SAVE_FOLDER = "Z:/data/webtoon/";
 
 router.get("/", async (req, res) => {
   const imageList = await webtoon.getWebToons();
@@ -67,16 +66,16 @@ router.post("/redownload/naver", async (req, res) => {
   res.sendStatus(200);
 });
 
-router.post("/download/newtoki", async (req, res) => {
+router.post("/download/other", async (req, res) => {
   const webtoonID = req.body.webtoonid;
-  await webtoon.newTokiWebtoonFileDownload(webtoonID, webtoon.saveFolder);
+  await webtoon.otherWebtoonFileDownload(webtoonID, webtoon.saveFolder);
   res.sendStatus(200);
 });
 
-router.post("/redownload/newtoki", async (req, res) => {
+router.post("/redownload/other", async (req, res) => {
   const webtoonID = req.body.webtoonid;
   const pageNo = req.body.pageNo;
-  await webtoon.newTokiWebtoonrReFileDownload(
+  await webtoon.otherWebtoonrReFileDownload(
     webtoonID,
     pageNo,
     webtoon.saveFolder
