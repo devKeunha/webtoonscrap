@@ -146,7 +146,9 @@ async function getPageList(toonID) {
   const mainPage = await utils.getHTML(url).then((html) => html.data);
   for (let i = 1; i <= mainPage.pageInfo.totalPages; i++) {
     let url = `${NAVER_API}/article/list?titleId=${toonID}&page=${i}`;
-    let html = await utils.getHTML(url).then((html) => html.data);
+    let html = await utils.getHTML(url).then((html) => html?.data);
+    if (html === undefined) return pageList;
+
     html.articleList.map((data) => {
       const date = `20${data.serviceDateDescription.replaceAll(".", "-")}`;
       const item = {
