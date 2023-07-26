@@ -264,6 +264,8 @@ exports.autoImageFileDownload = async function (folder) {
   result.forEach(async function (data) {
     if (data.websiteCode === "WEB_TOKI") {
       await exports.otherWebtoonFileDownload(data.webtoonID, SAVE_FOLDER);
+    } else if (data.websiteCode === "WEB_COMIC") {
+      await exports.comicFileDownload(data.webtoonID, SAVE_FOLDER);
     } else {
       await exports.naverWebtoonFileDownload(data.webtoonID, SAVE_FOLDER);
     }

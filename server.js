@@ -32,7 +32,7 @@ app.listen(port, () => {
 
 setInterval(async () => {
   const hour = new Date().getHours() + 9;
-  // if (hour >= 8 && hour <= 22) return;
+  if (hour >= 8 && hour <= 22) return;
 
   doScrapping();
 }, SCRP_INTERVEL);
