@@ -12,8 +12,6 @@ exports.fileDownload = async function (webToonID, folder) {
   const pageList = await getPageList(webToonID);
   const lastPage = Math.max(...pageList.map((x) => Number(x.pageNo)));
   const saveFolder = `${folder}/NA_${webToonID}`;
-
-  console.log(pageList, lastPage);
   if (!fs.existsSync(saveFolder)) {
     fs.mkdirSync(saveFolder);
   }
@@ -36,7 +34,7 @@ exports.webtoonFinshedList = async function () {
   let pageNo = 1;
   while (true) {
     const url = `${NAVER_API}/webtoon/titlelist/finished?page=${pageNo}&order=UPDATE`;
-    console.log(url);
+    console.log(`${new Date()}_${url}`);
     const html = await utils.getHTML(url);
     const lastPageNum = html.data.pageInfo.totalPages;
     if (pageNo > lastPageNum) break;
@@ -46,12 +44,12 @@ exports.webtoonFinshedList = async function () {
       models.tb_webtoon.upsert(data);
     });
     pageNo += 1;
-    console.log("finished");
   }
 };
 
 exports.webtoonLists = async function () {
   const html = await utils.getHTML(NAVER_URL);
+  console.log(`${new Date()}_${NAVER_URL}`);
   let list = [];
   let listData = list.push(
     ...(await webToonList(html.data.titleListMap.SATURDAY))
@@ -72,6 +70,7 @@ exports.webtoonLists = async function () {
 
 async function fileDownloadPage(webToonID, pageNo, saveFolder) {
   const url = `https://comic.naver.com/webtoon/detail?titleId=${webToonID}&no=${pageNo}`;
+  console.log(`${new Date()}_${url}`);
   const imageList = await utils.getHTML(url).then((html) => {
     const urlList = [];
     const $ = cheerio.load(html.data);

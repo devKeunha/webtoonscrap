@@ -1,16 +1,19 @@
 const axios = require("axios");
 const models = require("./../models");
 const download = require("image-downloader");
-const fs = require("fs");
-const { where } = require("sequelize");
 const SERVER_URL = "http://172.30.1.16:8080";
+
+const instance = axios.create();
+instance.defaults.withCredentials = true;
 
 exports.getHTML = async function (url) {
   try {
-    return await axios.get(url, {
+    return await instance.get(url, {
       headers: {
         "User-Agent":
           "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.3; WOW64; Trident/7.0)",
+        Cookie:
+          "PHPSESSID=d067d3eljfsd2udhd0o3lpfpbi05jep1rdgh3bmmtaau1ckq897e15hg7shh66qa",
       },
     });
   } catch (error) {
@@ -151,6 +154,9 @@ exports.savePageList = async function (pageList) {
   await models.tb_webtoon_pages.bulkCreate(pageList, {
     ignoreDuplicates: true,
   });
+  // await pageList.map((data) => {
+  //   models.tb_webtoon_pages.upsert(data);
+  // });
 };
 
 exports.saveReadPageDate = async function (id, no) {

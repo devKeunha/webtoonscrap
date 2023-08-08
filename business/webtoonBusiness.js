@@ -7,8 +7,15 @@ const sequelize = require("sequelize");
 const Op = sequelize.Op;
 const PAGE_PER_COUNT = 100;
 const SAVE_FOLDER = "/app/data/webtoon";
+// const SAVE_FOLDER = "d:/test";
 
 exports.saveFolder = SAVE_FOLDER;
+
+exports.getDefaultInfo = async function () {
+  return {
+    other_site_url: other.SERVER_URL,
+  };
+};
 
 exports.getWebToons = async function () {
   let result;
@@ -243,7 +250,7 @@ exports.autoImageFileDownload = async function (folder) {
   const result = await models.sequelize
     .query(
       `
-      SELECT 
+    SELECT 
       web.websiteCode, web.webtoonID
     FROM tb_webtoon web
     LEFT JOIN 
@@ -261,7 +268,8 @@ exports.autoImageFileDownload = async function (folder) {
     )
     .then((query) => query);
 
-  result.forEach(async function (data) {
+  for (let i = 0; i < result.length; i++) {
+    const data = result[i];
     if (data.websiteCode === "WEB_TOKI") {
       await exports.otherWebtoonFileDownload(data.webtoonID, SAVE_FOLDER);
     } else if (data.websiteCode === "WEB_COMIC") {
@@ -269,5 +277,12 @@ exports.autoImageFileDownload = async function (folder) {
     } else {
       await exports.naverWebtoonFileDownload(data.webtoonID, SAVE_FOLDER);
     }
-  });
+    await sleep(2000);
+  }
 };
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}

@@ -2,9 +2,9 @@ const webtoon = require("./../business/webtoonBusiness");
 const express = require("express");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  const imageList = await webtoon.getWebToons();
-  res.json(imageList);
+router.get("/defult", async (req, res) => {
+  const defaultInfo = await webtoon.getDefaultInfo();
+  res.json(defaultInfo);
 });
 
 router.get("/getList", async (req, res) => {

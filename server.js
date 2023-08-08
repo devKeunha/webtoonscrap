@@ -15,13 +15,13 @@ app.use(express.static("data"));
 app.use(cors());
 
 app.get("/", async function (req, res) {
+  doScrapping();
   res.send("Server lived");
 });
 
 // 폴더내 모든 파일 불러오기
 app.get("/getfiles", (req, res) => {
   fs.readdir("./..", (error, fileList) => {
-    console.log(fileList);
     res.send(fileList);
   });
 });
@@ -39,8 +39,7 @@ setInterval(async () => {
 
 async function doScrapping() {
   await webtoon.getNaverWebtoons();
-  setting.config.OTHER_SEVER_VALUES.forEach(async function (x) {
-    await webtoon.getOtherWebtoons(x);
-  });
+  for (let i = 0; i < setting.config.OTHER_SEVER_VALUES.length; i++)
+    await webtoon.getOtherWebtoons(setting.config.OTHER_SEVER_VALUES[i]);
   await webtoon.autoImageFileDownload(webtoon.saveFolder);
 }
