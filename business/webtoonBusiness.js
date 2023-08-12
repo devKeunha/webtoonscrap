@@ -7,13 +7,13 @@ const sequelize = require("sequelize");
 const Op = sequelize.Op;
 const PAGE_PER_COUNT = 100;
 const SAVE_FOLDER = "/app/data/webtoon";
-// const SAVE_FOLDER = "d:/test";
+// const SAVE_FOLDER = "Z:/data/webtoon";
 
 exports.saveFolder = SAVE_FOLDER;
 
 exports.getDefaultInfo = async function () {
   return {
-    other_site_url: other.SERVER_URL,
+    other_site_url: utils.loadConfig().SERVER_URL,
   };
 };
 

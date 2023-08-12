@@ -15,7 +15,7 @@ app.use(express.static("data"));
 app.use(cors());
 
 app.get("/", async function (req, res) {
-  doScrapping();
+  await doScrapping();
   res.send("Server lived");
 });
 

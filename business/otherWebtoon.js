@@ -2,12 +2,15 @@ const utils = require("./function");
 const cheerio = require("cheerio");
 const models = require("../models");
 const setting = require("../config/envirement");
-const WEBTOON_SERVER = setting.config.SERVER_URL;
 const fs = require("fs");
 
-exports.SERVER_URL = setting.config.SERVER_URL;
+function getServerUrl() {
+  return utils.loadConfig().SERVER_URL;
+}
 
-exports.BASE_URL = `${WEBTOON_SERVER}/webtoon`;
+exports.SERVER_URL = getServerUrl();
+
+exports.BASE_URL = `${getServerUrl()}/webtoon`;
 
 exports.fileDownload = async function (webToonID, folder) {
   const idList = await getOtherIDList(webToonID);
@@ -23,9 +26,10 @@ exports.fileDownload = async function (webToonID, folder) {
     fs.mkdirSync(saveFolder);
   }
 
+  const serverurl = utils.loadConfig().SERVER_URL;
   const pageNum = await utils.getWebtoonLastPageNumber(webToonID);
   for (var i = pageNum; i <= idList.length; i++) {
-    const url = `${WEBTOON_SERVER}/webtoon/${idList[i - 1]}`;
+    const url = `${serverurl}/webtoon/${idList[i - 1]}`;
     console.log(`${new Date()}_${url}`);
     const urlPathList = await utils.getHTML(url).then((html) => {
       if (html === null || html === undefined) return;
@@ -89,9 +93,9 @@ exports.fileReDownload = async function (webToonID, pageNo, folder) {
   if (!fs.existsSync(saveFolder)) {
     fs.mkdirSync(saveFolder);
   }
-
+  const serverurl = utils.loadConfig().SERVER_URL;
   const i = pageNo;
-  const url = `${WEBTOON_SERVER}/webtoon/${idList[i - 1]}`;
+  const url = `${serverurl}/webtoon/${idList[i - 1]}`;
   console.log(`${new Date()}_${url}`);
   const urlPathList = await utils.getHTML(url).then((html) => {
     if (html === null || html === undefined) return;
@@ -149,7 +153,7 @@ exports.webtoonLists = async function (toon) {
   const checkTime = today.getTime() - MINUS_TIME;
   const totalList = [];
   while (true) {
-    const url = `${WEBTOON_SERVER}/webtoon/p${pageNo}?toon=${toon}`;
+    const url = `${getServerUrl()}/webtoon/p${pageNo}?toon=${toon}`;
     console.log(`${new Date()}_${url}`);
     const html = await utils.getHTML(url);
 
@@ -200,7 +204,7 @@ exports.webtoonLists = async function (toon) {
 };
 
 async function getOtherIDList(webId) {
-  const url = `${WEBTOON_SERVER}/webtoon/${webId}`;
+  const url = `${getServerUrl()}/webtoon/${webId}`;
   let idList = [];
   const webtoonidList = await utils.getHTML(url).then((html) => {
     if (!html) return;
@@ -252,7 +256,7 @@ async function getOtherIDListByFistPage(webId) {
   });
 
   const toonID = firstId.dataValues.serverUrl;
-  const url = `${WEBTOON_SERVER}/webtoon/${toonID}`;
+  const url = `${getServerUrl()}/webtoon/${toonID}`;
   let idList = [];
   await utils.getHTML(url).then((html) => {
     if (!html) return;

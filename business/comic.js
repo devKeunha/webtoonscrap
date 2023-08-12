@@ -2,7 +2,7 @@ const utils = require("./function");
 const cheerio = require("cheerio");
 const models = require("../models");
 const setting = require("../config/envirement");
-const WEBTOON_SERVER = setting.config.SERVER_COMIC_URL;
+const WEBTOON_SERVER = utils.loadConfig().SERVER_COMIC_URL;
 const fs = require("fs");
 
 exports.BASE_URL = `${WEBTOON_SERVER}/comic`;

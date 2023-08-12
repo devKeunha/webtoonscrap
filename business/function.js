@@ -2,18 +2,19 @@ const axios = require("axios");
 const models = require("./../models");
 const download = require("image-downloader");
 const SERVER_URL = "http://172.30.1.16:8080";
+const fs = require("fs");
 
 const instance = axios.create();
 instance.defaults.withCredentials = true;
 
 exports.getHTML = async function (url) {
   try {
+    const cookieValue = loadCookieValue().cookie;
     return await instance.get(url, {
       headers: {
         "User-Agent":
           "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.3; WOW64; Trident/7.0)",
-        Cookie:
-          "PHPSESSID=d067d3eljfsd2udhd0o3lpfpbi05jep1rdgh3bmmtaau1ckq897e15hg7shh66qa",
+        Cookie: `PHPSESSID=${cookieValue}`,
       },
     });
   } catch (error) {
@@ -171,4 +172,25 @@ exports.saveReadPageDate = async function (id, no) {
       },
     }
   );
+};
+
+const SAVE_FILE_PATH = `${__dirname}/./../config/setting.json`;
+
+function loadCookieValue() {
+  const content = JSON.parse(fs.readFileSync(SAVE_FILE_PATH, "utf-8"));
+  return content;
+}
+
+exports.loadConfig = function () {
+  return loadCookieValue();
+};
+
+exports.saveconfig = function (cookieValue) {
+  const content = loadCookieValue();
+  const value = {
+    cookie: cookieValue,
+    SERVER_URL: content.SERVER_URL,
+    SERVER_COMIC_URL: content.SERVER_COMIC_URL,
+  };
+  fs.writeFileSync(SAVE_FILE_PATH, JSON.stringify(value), "utf-8");
 };

@@ -1,6 +1,7 @@
 const webtoon = require("./../business/webtoonBusiness");
 const express = require("express");
 const router = express.Router();
+const util = require("./../business/function");
 
 router.get("/defult", async (req, res) => {
   const defaultInfo = await webtoon.getDefaultInfo();
@@ -86,6 +87,11 @@ router.post("/redownload/other", async (req, res) => {
     pageNo,
     webtoon.saveFolder
   );
+  res.sendStatus(200);
+});
+
+router.get("/savecookie/:VALUE", async (req, res) => {
+  util.saveconfig(req.params.VALUE);
   res.sendStatus(200);
 });
 
